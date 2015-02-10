@@ -1,0 +1,53 @@
+/* Arquivo de folhas de estilos */
+
+.header {
+	padding: 10px;
+}
+
+.content-box {
+	min-height: 300px;
+}
+
+.botao-acoes {
+	padding-left: 5px;
+	padding-right: 5px;
+}
+.oculto {
+	display: none;
+}
+.box-serie {
+	border: 1px solid #DDD;
+	padding: 10px;
+	margin: 0 0 10px 0;
+}
+.temporada {
+	padding: 10px 0 10px 0;
+}
+.red {
+	color: red;
+}
+.red:hover {
+	color: red;
+}
+.btn-temporada {
+	margin-bottom: 4px;
+}
+.title-item {
+	font-size: 22px;
+	border-bottom: 1px solid #EEE;
+}
+.title-description {
+	font-size: 12px;
+	margin: -5px 0 10px 0;
+}
+.temporada-heading {
+	background: #efefef;
+	padding: 10px;
+}
+.temporada-content {
+	
+}
+.temporada-item {
+	border-bottom: 1px solid #EEE;
+	padding: 10px;
+}

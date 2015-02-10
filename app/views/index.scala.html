@@ -1,0 +1,155 @@
+@(title: String, seriesAssistir: List[Serie], seriesAssistindo: List[Serie])
+
+@main(title) {
+
+		<div class="col-md-6 ">
+			<div class="page-header">
+				<h2>Séries a acompanhar</h2>
+			</div>
+			<div class="">
+				@if(seriesAssistir.size == 0) {
+					<p>Nenhuma série cadastrada</p>
+				} else {
+				    @for(serie <- seriesAssistir) {
+				    	<div class="box-serie" id="serie-@serie.getId">
+				    		<form class="pull-right" method="post" action="/serie/status">
+							    <input type="hidden" name="id" value="@serie.getId">
+							    <button type="submit" class="btn btn-primary btn-xs">
+									<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Acompanhar
+							    </button>
+							</form>
+						    <p class="title-item text-info">@serie.getNome</p>
+						    <p class="title-description">@serie.getTotalDeEpisodios() episódio(s), 
+						    @serie.getTotalDeEpisodiosAssistidos() assistido(s) e @serie.getTotalDeEpisodiosAssistir() a assistir</p>
+						    <p>Temporadas:
+						    @for(temporada <- serie.getTemporadas) {
+						      	<a href="#serie-@serie.getId" class="btn-temporada" 
+						      	onclick="$('.temporada').hide();
+						      	$('#serie-@serie.getId-t-@temporada').toggle(500);" title="Ver episódios da temporada @temporada">@temporada</a>, 
+						    }
+						    </p>
+							@for(temporada <- serie.getTemporadas) {
+							<div id="serie-@serie.getId-t-@temporada" class="oculto temporada">
+								<div class="temporada-heading">Temporada: @temporada
+									<button class="close red" onclick="$('.temporada').hide();">×</button>
+								</div>
+								<div class="temporada-content">
+								@for(episodio <- serie.getEpisodios(temporada)) {
+							        <div class="temporada-item">
+							        <p><b>Episódio @episodio.getNumero:</b><br />@episodio.getNome</p>
+							        </div>
+								}
+								</div>
+							</div>
+							}
+						</div>
+				    }
+				}
+			</div>		
+		</div>
+		<div class="col-md-6">
+			<div class="page-header">
+				<h2>Séries acompanhadas</h2>
+			</div>
+			@if(seriesAssistindo.size == 0) {
+				<p>Nenhuma série acompanhada ainda</p>
+			} else {
+				@for(serie <- seriesAssistindo) {
+				    	<div class="box-serie" id="serie-@serie.getId">
+				    		<form class="pull-right" method="post" action="/serie/status">
+							    <input type="hidden" name="id" value="@serie.getId">
+							    <button type="submit" class="btn btn-danger btn-xs">
+									<span class="glyphicon glyphicon-thumbs-down" aria-hidden="true"></span> Não Acompanhar
+							    </button>
+							</form>
+						    <p class="title-item text-info">@serie.getNome</p>
+						    <p class="title-description">@serie.getTotalDeEpisodios() episódio(s), 
+						    @serie.getTotalDeEpisodiosAssistidos() assistido(s) e @serie.getTotalDeEpisodiosAssistir() a assistir</p>
+						    @if(serie.hasTemporadaAssistidaCompleta) {
+							    <div class="panel panel-success">
+							    	<div class="panel-heading">Temporadas Assistidas Completas:</div>
+							    	<div class="panel-body">
+									   	@for(temporada <- serie.getTemporadas) {
+									    	@if(serie.isTemporadaAssistidaCompleta(temporada)) {
+										    	<a class="btn btn-primary btn-xs btn-temporada" href="#serie-@serie.getId" 
+										      	onclick="$('.temporada').hide();
+										      	$('#serie-@serie.getId-t-@temporada').toggle(500);" title="Ver episódios da temporada @temporada">@temporada</a>
+									    	}
+									    }
+							    	</div>
+							    </div>
+						    }
+						    @if(serie.hasTemporadaAssistidaIncompleta) {
+							    <div class="panel panel-warning">
+							    	<div class="panel-heading">Temporadas Assistidas Incompletas:</div>
+							    	<div class="panel-body">
+									    @for(temporada <- serie.getTemporadas) {
+									      	@if(serie.isTemporadaAssistidaIncompleta(temporada)) {
+										    	<a class="btn btn-primary btn-xs btn-temporada" href="#serie-@serie.getId" 
+										      	onclick="$('.temporada').hide();
+										      	$('#serie-@serie.getId-t-@temporada').toggle(500);" title="Ver episódios da temporada @temporada">@temporada</a>
+										      	Próximo episódio: 
+										      		@if(serie.getProximoEpisodio(temporada) != null) {
+										      			@serie.getProximoEpisodio(temporada).getNome
+										      		}
+										      		<br />
+									    	}
+									    }
+									</div>
+							    </div>
+						    }
+						    @if(serie.hasTemporadaNaoAssistida) {
+							    <div class="panel panel-danger">
+							    	<div class="panel-heading">Temporadas Não Assistidas</div>
+							    	<div class="panel-body">
+									    @for(temporada <- serie.getTemporadas) {
+									      	@if(serie.isTemporadaNaoAssistida(temporada)) {
+										    	<a class="btn btn-primary btn-xs btn-temporada" href="#serie-@serie.getId" 
+										      	onclick="$('.temporada').hide();
+										      	$('#serie-@serie.getId-t-@temporada').toggle(500);" title="Ver episódios da temporada @temporada">@temporada</a>
+									    	}
+									    }
+							    	</div>
+							    </div>
+						    }
+							@for(temporada <- serie.getTemporadas) {
+							<div id="serie-@serie.getId-t-@temporada" class="oculto temporada">
+								<div class="temporada-heading">Temporada: @temporada
+									<button class="close red" onclick="$('.temporada').hide();">×</button>
+								</div>
+								<div class="temporada-content">
+								@for(episodio <- serie.getEpisodios(temporada)) {
+							        <div class="temporada-item">
+							        <form id="formEpStatus" class="pull-right" method="post" action="/episodio/status">
+							            <input type="hidden" id="idEpisodio" name="id" value="@episodio.getId">
+							            
+								        @if(episodio.isAssistido) {
+								            <button type="submit" class="btn btn-warning btn-xs">
+								                <span class="glyphicon glyphicon-thumbs-down" aria-hidden="true" title="Marcar episódio como não assistido"></span> Não Assisti
+								            </button> 
+									    } else {
+									        <button type="submit" class="btn btn-success btn-xs">
+									            <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true" title="Marcar episódio como assistido"></span> Já assisti
+									        </button>
+									    }
+							        </form>
+							        
+							        <p><b>Episódio @episodio.getNumero: 
+									@if(episodio.isAssistido){
+										<span class="text-success">Assistido</span>
+									} else {
+										<span class="text-danger">Não assistido</span>
+									}
+									 </b>
+									 <br />@episodio.getNome
+									</p></div>
+								}
+								</div>
+							</div>
+							}
+						</div>
+				    }
+			}
+		</div>
+
+}
