@@ -5,6 +5,7 @@
 		<div class="col-md-6 ">
 			<div class="page-header">
 				<h2>Séries a acompanhar</h2>
+                <h6>Obs: "tipo personalizado indicará episódios seguintes, após assistir 3 episódios posteriores a última indicação."</h6>
 			</div>
 			<div class="">
 				@if(seriesAssistir.size == 0) {
@@ -17,8 +18,15 @@
 							    <button type="submit" class="btn btn-primary btn-xs">
 									<span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> Acompanhar
 							    </button>
+                                <br/>
+                                <p>Indicação do próximo episódio: <p>
+                                <select class="input-medium" name="proximo">
+                                    <option>Seguinte</option>
+                                    <option>Mais Antigo</option>
+                                    <option>Personalizado</option>
+                                </select>
 							</form>
-						    <p class="title-item text-info">@serie.getNome</p>
+                            <p class="title-item text-info">@serie.getNome</p>
 						    <p class="title-description">@serie.getTotalDeEpisodios() episódio(s), 
 						    @serie.getTotalDeEpisodiosAssistidos() assistido(s) e @serie.getTotalDeEpisodiosAssistir() a assistir</p>
 						    <p>Temporadas:
@@ -89,8 +97,8 @@
 										      	onclick="$('.temporada').hide();
 										      	$('#serie-@serie.getId-t-@temporada').toggle(500);" title="Ver episódios da temporada @temporada">@temporada</a>
 										      	Próximo episódio: 
-										      		@if(serie.getProximoEpisodio(temporada) != null) {
-										      			@serie.getProximoEpisodio(temporada).getNome
+										      		@if(serie.getProximoEpisodio() != null) {
+										      			@serie.getProximoEpisodio().getNome
 										      		}
 										      		<br />
 									    	}

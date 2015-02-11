@@ -19,6 +19,7 @@ public class Serie implements Comparable<Serie> {
 
 	private String nome;
 	private boolean status;
+    private TipoDoProximo tipoDoProximo;
 	
 	@OneToMany(mappedBy = "serie")
 	private List<Episodio> episodios;
@@ -39,6 +40,10 @@ public class Serie implements Comparable<Serie> {
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+    public TipoDoProximo getTipoDoProximo() {return tipoDoProximo;}
+
+    public void setTipoDoProximo (TipoDoProximo tipoDoProximo){ this.tipoDoProximo = tipoDoProximo; }
 	
 	public boolean isAssistindo() {
 		return status;
@@ -91,19 +96,8 @@ public class Serie implements Comparable<Serie> {
 		return true;
 	}
 	
-	public Episodio getProximoEpisodio(int temporada) {
-		List<Episodio> eps = getEpisodios(temporada);
-		int i = 0;
-		int index = -1;
-		while (i < eps.size()) {
-			if(eps.get(i).isAssistido()) {
-				index = i;
-			}
-			i++;
-		}
-		if(index == i-1) return null;
-		if(index == -1) return eps.get(0);
-		return eps.get(index+1);	
+	public Episodio getProximoEpisodio() {
+		return getTipoDoProximo().getProximoEpisodio(this);
 	}
 	
 	public List<Integer> getTemporadas() {
