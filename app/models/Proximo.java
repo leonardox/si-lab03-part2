@@ -21,8 +21,12 @@ public class Proximo extends TipoDoProximo {
                     }
                     j++;
                 }
-                if(index == j-1) proximo = null;
-                if(index == -1) proximo = eps.get(0);
+                if(index == j-1){
+                    proximo = null;
+                }
+                if(index == -1){
+                    proximo = eps.get(0);
+                }
                 proximo = eps.get(index + 1);
             }
         }

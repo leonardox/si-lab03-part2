@@ -1,6 +1,5 @@
 package models;
 
-import javax.persistence.Entity;
 import java.io.Serializable;
 
 

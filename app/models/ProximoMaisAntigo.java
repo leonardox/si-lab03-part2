@@ -20,7 +20,9 @@ public class ProximoMaisAntigo extends TipoDoProximo{
                         }
                         j++;
                     }
-                    if(index == -1) return eps.get(0);
+                    if(index == -1){
+                        return eps.get(0);
+                    }
                     return eps.get(index + 1);
             }else{
                 if (serie.isTemporadaNaoAssistida(i)){
